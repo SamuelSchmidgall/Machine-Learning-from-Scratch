@@ -7,7 +7,8 @@ class ArtificialNeuralNetwork:
             raise Exception("Invalid input size")
         self.input_length  = dimensions[0]
         self.output_length = dimensions[-1]
-        self.weights = [np.random.uniform(-1, 1, (dimensions[itr], dimensions[itr+1])) for itr in range(len(dimensions)-1)]
+        self.weights = [np.random.uniform(-1, 1, (dimensions[itr+1], dimensions[itr])) for itr in range(len(dimensions)-1)]
+
 
     def sigmoid(self, x):
         """ Sigmoid function """
@@ -19,12 +20,12 @@ class ArtificialNeuralNetwork:
 
     def activate(self, weights, inp):
         """ Activation function """
-        return self.sigmoid(np.matmul(inp, weights))
+        return self.sigmoid(np.matmul(weights,inp))
 
     def forward_prop(self, inputs):
         """ Forward propagation """
-        output, node_outputs = self._forward_prop(inputs)
-        return output
+        a, b = self._forward_prop(inputs)
+        return a
 
     def _forward_prop(self, inputs):
         """ Forward propagation with output values for backpropagation"""
@@ -32,31 +33,43 @@ class ArtificialNeuralNetwork:
             raise Exception("Invalid input")
         elif type(inputs) is list:
             inputs = np.array(inputs)
-        outputs = list()
+        outputs = [inputs]
         for itr in range(len(self.weights)):
             inputs = self.activate(self.weights[itr], inputs)
             outputs.append(inputs)
-        return inputs, outputs
+        return inputs, np.array(outputs[:-1])
 
-    def back_prop(self, inputs, exp_val, learning_rate=0.1):
+    def back_prop(self, inputs, exp_val, learning_rate=0.01):
         """ Backpropagation algorithm """
         if len(exp_val) != self.output_length or type(exp_val) not in (np.ndarray, list):
             raise Exception("Invalid expected value")
         elif type(exp_val) is list:
             exp_val = np.array(exp_val)
-        weight_len = len(self.weights)
-        obtained_val, outputs = self._forward_prop(inputs)
-        outputs = np.array(outputs)
-        error = (exp_val - outputs[-1]) * self.sigmoid_derivative(obtained_val) # initial error based on output
-        delta = error * self.sigmoid_derivative(obtained_val) # initial delta
-        deltas = [delta]
-        for layer in range(weight_len-2, -1, -1): # calculate the error deltas for each set of weights
-            output = self.sigmoid_derivative(outputs[layer])
-            error = np.matmul(self.weights[layer+1], delta)
-            delta = np.multiply(output, error)
-            deltas.append(delta)
-        for weights in range(weight_len): # update the weights based on error deltas
-            curr_weights = self.weights[weight_len-weights-1]
-            delta = np.resize(deltas[weights], (len(deltas[weights]), 1))
-            weight_upd = np.matmul(delta, np.ones((1, len(curr_weights)))).T
-            self.weights[weight_len-weights-1] = np.add(curr_weights, learning_rate*weight_upd)
+        ret_val, output_values = self._forward_prop(inputs)
+        ret_val = np.resize(ret_val,(len(ret_val),1))
+        hidden = np.resize(output_values[-1],(len(output_values[-1]),1))
+        targets = np.resize(exp_val,(len(exp_val), 1))
+        error = np.add(targets, -1 * ret_val)
+        gradients = np.multiply(self.sigmoid_derivative(ret_val), error) * learning_rate
+        weight_ho_deltas = np.matmul(gradients, hidden.T)
+        self.weights[-1] = np.add(self.weights[-1], weight_ho_deltas)
+        for itr in reversed(range(len(self.weights))[1:]):
+            inputs = np.resize(output_values[itr-1], (len(output_values[itr-1]), 1))
+            who_t = self.weights[itr].T
+            error = np.matmul(who_t, error)
+            gradients = np.multiply(self.sigmoid_derivative(hidden), error)*learning_rate
+            weight_ih_deltas = np.matmul(gradients, inputs.T)
+            self.weights[itr-1] = np.add(self.weights[itr-1], weight_ih_deltas)
+            hidden = np.resize(output_values[itr-1], (len(output_values[itr-1]), 1))
+
+
+
+
+
+
+
+
+ann = ArtificialNeuralNetwork([2, 4, 2, 5, 2])
+for i in range(10000):
+    ann.back_prop(np.array([1,1]), np.array([0,0]))
+
