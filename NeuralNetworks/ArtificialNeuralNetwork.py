@@ -13,7 +13,7 @@ class ArtificialNeuralNetwork:
             self._weights = [np.random.uniform(-1, 1, (dimensions[itr+1], dimensions[itr])) for itr in range(len(dimensions)-1)]
         else:
             self._weights = self._load_weights(weights)
-        self.biases = [np.random.uniform(-1, 1, (dimensions[itr+1])) for itr in range(len(dimensions)-1)]
+        self._biases = [np.random.uniform(-1, 1, (dimensions[itr+1])) for itr in range(len(dimensions)-1)]
 
     def _sigmoid(self, x):
         """ Sigmoid function """
@@ -25,7 +25,7 @@ class ArtificialNeuralNetwork:
 
     def _activate(self, weights, inp, weight_val):
         """ Activation function """
-        return self._sigmoid(np.add(np.matmul(weights,inp), self.biases[weight_val]))
+        return self._sigmoid(np.add(np.matmul(weights,inp), self._biases[weight_val]))
 
     def forward_prop(self, inputs):
         """ Forward propagation """
@@ -65,7 +65,7 @@ class ArtificialNeuralNetwork:
         error = np.add(targets, -1 * ret_val) # generate initial error
         gradients = np.multiply(self._sigmoid_derivative(ret_val), error) * learning_rate # get initial gradients
         weight_deltas = np.matmul(gradients, hidden.T) # generate initial weight deltas
-        self.biases[-1] = np.add(self.biases[-1], gradients)
+        self._biases[-1] = np.add(self._biases[-1], gradients)
         self._weights[-1] = np.add(self._weights[-1], weight_deltas) # update weights based on weight deltas
         for itr in reversed(range(len(self._weights))[1:]):
             # resize into vector format and update hidden layer weights
@@ -73,7 +73,7 @@ class ArtificialNeuralNetwork:
             weight_m = self._weights[itr].T # generate transpose of corresponding weight matrix
             error = np.matmul(weight_m, error) # calculate error
             gradients = np.multiply(self._sigmoid_derivative(hidden), error)*learning_rate # calculate gradient
-            self.biases[itr-1] = np.add(self.biases[itr-1], np.resize(gradients, (len(self.biases[itr-1]))))
+            self._biases[itr-1] = np.add(self._biases[itr-1], np.resize(gradients, (len(self._biases[itr-1]))))
             weight_deltas = np.matmul(gradients, inputs.T) # generate weight deltas
             self._weights[itr-1] = np.add(self._weights[itr-1], weight_deltas) # update weights
             hidden = np.resize(output_values[itr-1], (len(output_values[itr-1]), 1)) # update hidden layer outputs
