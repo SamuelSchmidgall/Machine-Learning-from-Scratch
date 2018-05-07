@@ -77,21 +77,3 @@ class ArtificialNeuralNetwork:
             weight_deltas = np.matmul(gradients, inputs.T) # generate weight deltas
             self._weights[itr-1] = np.add(self._weights[itr-1], weight_deltas) # update weights
             hidden = np.resize(output_values[itr-1], (len(output_values[itr-1]), 1)) # update hidden layer outputs
-
-
-ann = ArtificialNeuralNetwork([1, 30, 40, 1])
-for i in range(10000):
-    ann.back_prop([10], [0])
-    ann.back_prop([9], [1])
-    ann.back_prop([8], [0])
-    ann.back_prop([7], [1])
-    ann.back_prop([6], [0])
-    ann.back_prop([5], [1])
-    ann.back_prop([4], [0])
-    ann.back_prop([3], [1])
-    ann.back_prop([2], [0])
-    ann.back_prop([1], [1])
-    ann.back_prop([0], [0])
-
-for i in range(11):
-    print(ann.forward_prop([i]))
