@@ -77,3 +77,5 @@ class ArtificialNeuralNetwork:
             weight_deltas = np.matmul(gradients, inputs.T) # generate weight deltas
             self._weights[itr-1] = np.add(self._weights[itr-1], weight_deltas) # update weights
             hidden = np.resize(output_values[itr-1], (len(output_values[itr-1]), 1)) # update hidden layer outputs
+
+        
