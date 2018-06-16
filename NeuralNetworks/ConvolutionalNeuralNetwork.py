@@ -1,10 +1,14 @@
 import math
 import numpy as np
+from NeuralNetworks.ArtificialNeuralNetwork import ArtificialNeuralNetwork
 
-
+#todo: allow for people to put in any sized images and 'fluff' them
 class ConvolutionalNeuralNetwork:
-    def __init__(self):
-        pass
+    def __init__(self, dimensions):
+        if len(dimensions) <= 1 or dimensions[0] <= 1:
+            raise Exception("Invalid CNN dimensions")
+        self.net = ArtificialNeuralNetwork(dimensions) # GENERATE <-
+
 
 
 def check_NxN(*matrices):

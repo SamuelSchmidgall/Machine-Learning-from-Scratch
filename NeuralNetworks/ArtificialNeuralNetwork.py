@@ -3,7 +3,9 @@ import numpy as np
 
 class ArtificialNeuralNetwork:
     def __init__(self, dimensions, weights=None):
-        """ Instantiate Neural Network """
+        """ Instantiate Neural Network
+            LIST: dimensions; dimensions of neural network weights
+        """
         if not all(element > 0 for element in dimensions):
             raise Exception("Invalid input size")
         self._input_length  = dimensions[0]
@@ -16,32 +18,41 @@ class ArtificialNeuralNetwork:
         self._biases = [np.random.uniform(-1, 1, (dimensions[itr+1])) for itr in range(len(dimensions)-1)]
 
     def _sigmoid(self, x):
-        """ Sigmoid function """
+        """ Sigmoid function
+            FLOAT/INT/NDARRAY: x; value to compute sigmoid
+        """
         return 1/(1+math.e**(-x))
 
     def _sigmoid_derivative(self, sigmoid_value):
-        """ Derivative of sigmoid function """
+        """ Derivative of sigmoid function
+            FLOAT/INT/NDARRAY: sigmoid_value; already processed sigmoid value used to compute sigmoid derivative
+        """
         return sigmoid_value*(1.0 - sigmoid_value)
 
     def _activate(self, weights, inp, weight_val):
-        """ Activation function """
+        """ Activation function
+            NDARRAY: weights; network weight matrix
+            NDARRAY: inp; input values
+            INT: weight_val; used to index biases
+        """
         return self._sigmoid(np.add(np.matmul(weights,inp), self._biases[weight_val]))
 
-    def forward_prop(self, inputs):
-        """ Forward propagation """
-        value, outputs = self._forward_prop(inputs)
-        return value
-
     def save(self, filename):
-        """ Save the weights of your neural network """
+        """ Save the weights of your neural network
+            STRING: filename; used to conveniently save neural network weights as numpy matrix
+        """
         np.save(filename, self._weights)
 
     def _load_weights(self, filename):
-        """ Private method: load weights into neural network """
+        """ Load weights into neural network
+            STRING: filename; location in which network weights are retrieved
+        """
         return np.load(filename)
 
     def _forward_prop(self, inputs):
-        """ Forward propagation with output values for backpropagation"""
+        """ Forward propagation with output values for backpropagation
+            NDARRAY: inputs; used to calculate forward propogation value
+        """
         if len(inputs) != self._input_length or type(inputs) not in (np.ndarray, list):
             raise Exception("Invalid input")
         elif type(inputs) is list:
@@ -53,7 +64,11 @@ class ArtificialNeuralNetwork:
         return inputs, np.array(outputs[:-1])
 
     def back_prop(self, inputs, exp_val, learning_rate=0.01):
-        """ Backpropagation algorithm using matrix algebra """
+        """ Backpropagation algorithm using matrix algebra
+            NDARRAY: inputs; input values
+            NDARRAY: exp_val; expected return value from input
+            FLOAT: learning_rate; learning rate of network
+        """
         if len(exp_val) != self._output_length or type(exp_val) not in (np.ndarray, list):
             raise Exception("Invalid expected value -- check size or type")
         elif type(exp_val) is list:
