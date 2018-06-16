@@ -49,7 +49,7 @@ class ArtificialNeuralNetwork:
         """
         return np.load(filename)
 
-    def _forward_prop(self, inputs):
+    def forward_prop(self, inputs):
         """ Forward propagation with output values for backpropagation
             NDARRAY: inputs; used to calculate forward propogation value
         """
@@ -73,7 +73,7 @@ class ArtificialNeuralNetwork:
             raise Exception("Invalid expected value -- check size or type")
         elif type(exp_val) is list:
             exp_val = np.array(exp_val)
-        ret_val, output_values = self._forward_prop(inputs) # forward prop values
+        ret_val, output_values = self.forward_prop(inputs) # forward prop values
         ret_val = np.resize(ret_val,(len(ret_val),1)) # resize into vector format
         hidden = np.resize(output_values[-1],(len(output_values[-1]),1)) # resize into vector format
         targets = np.resize(exp_val,(len(exp_val), 1)) # resize into vector format
