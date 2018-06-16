@@ -9,8 +9,6 @@ class ConvolutionalNeuralNetwork:
             raise Exception("Invalid CNN dimensions")
         self.net = ArtificialNeuralNetwork(dimensions) # GENERATE <-
 
-
-
 def check_NxN(*matrices):
     """ Makes sure all matrices are NxN and returns dimension """
     mats = list()
