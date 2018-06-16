@@ -3,13 +3,13 @@ from NetworkGenerator.Generator import Generator
 from NeuralNetworks.ArtificialNeuralNetwork import ArtificialNeuralNetwork
 
 class FlexANN:
-    """ An artificial neural network that generates itself
-        STRING: d_type; type of data that Network will process
-        LIST: io_tuples; list of tuples corresponding to expected output given an input
-        LIST: test_data; data used for testing
-        LIST: train_data; data used for training
-    """
     def __init__(self, d_type, io_tuples, train_data, test_data):
+        """ An ANN that generates its own parameters based on input data
+            STRING: d_type; type of data that Network will process
+            LIST: io_tuples; list of tuples corresponding to expected output given an input
+            LIST: test_data; data used for testing
+            LIST: train_data; data used for training
+        """
         self.network_data = io_tuples
         self.training_data, self.test_data = train_data, test_data
         self.dimensions = Generator(d_type, io_tuples).generator.network
