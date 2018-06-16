@@ -14,12 +14,12 @@ class GeneratorANN:
             if (len(io_tuples[t+1][0]), len(io_tuples[t+1][1])) != io_size:
                 raise Exception("Inconsistent IO size")
         num_hidden = 1
-        nsize = lambda a, ni, no, ns: int(ns/((ni+no)*a))
+        nsize = lambda ni, no, ns: int(ns/(ni+no))*3
         if io_size[0] >= 3:
             num_hidden = int(math.ceil(math.log(io_size[0],3)))
         if (num_hidden/2)%1 == 0.5:
             # GENERATE PALINDROME ABCBA OF INCREASING SIZE IF ODD
-            m_size = nsize(2, io_size[0], io_size[1], len(io_tuples))
+            m_size = nsize(io_size[0], io_size[1], len(io_tuples))
             if m_size == 0:
                 raise Exception("Insufficent data")
             network.append(m_size)
@@ -29,7 +29,7 @@ class GeneratorANN:
                 network.insert(len(network),m_size-dist*(i+1))
         else:
             # GENERATE PALINDROME ABCCBA OF INCREASING SIZE IF EVEN
-            m_size = nsize(2, io_size[0], io_size[1], len(io_tuples))
+            m_size = nsize(io_size[0], io_size[1], len(io_tuples))
             if m_size == 0:
                 raise Exception("Insufficent data")
             for i in range(2):
