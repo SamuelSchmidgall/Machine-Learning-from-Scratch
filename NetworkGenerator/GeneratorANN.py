@@ -1,10 +1,10 @@
 import math
 
 class GeneratorANN:
-    def __init__(self, io_tuples):
-        self.network = self._generate(io_tuples)
+    def __init__(self, io_tuples, complexity):
+        self.network = self._generate(io_tuples, complexity)
 
-    def _generate(self, io_tuples):
+    def _generate(self, io_tuples, complexity):
         """ Generate an ANN based on input output tuples
             LIST: io_tuples; list of tuples corresponding to expected output given an input
         """
@@ -17,13 +17,14 @@ class GeneratorANN:
         nsize = lambda ni, no, ns: int(ns/(ni+no))*3
         if io_size[0] >= 3:
             num_hidden = int(math.ceil(math.log(io_size[0],3)))
+        num_hidden += complexity
         if (num_hidden/2)%1 == 0.5:
             # GENERATE PALINDROME ABCBA OF INCREASING SIZE IF ODD
-            m_size = nsize(io_size[0], io_size[1], len(io_tuples))
+            m_size = nsize(io_size[0], io_size[1], len(io_tuples))*7
             if m_size == 0:
                 raise Exception("Insufficent data")
             network.append(m_size)
-            dist = int((network[-1] - io_size[0])/(math.ceil(num_hidden/2)))
+            dist = int((network[-1] - io_size[0])/(math.ceil(num_hidden/2))) + 1
             for i in range(int(math.floor(num_hidden/2))):
                 network.insert(0,m_size-dist*(i+1))
                 network.insert(len(network),m_size-dist*(i+1))

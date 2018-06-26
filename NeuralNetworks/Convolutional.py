@@ -5,9 +5,15 @@ from NeuralNetworks.Artificial import ArtificialNeuralNetwork
 #todo: allow for people to put in any sized images and 'fluff' them
 class ConvolutionalNeuralNetwork:
     def __init__(self, dimensions):
-        if len(dimensions) <= 1 or dimensions[0] <= 1:
+        if len(dimensions) <= 1 or dimensions[0] <= 1 or len(dimensions[0]) != 2 \
+                or math.log(dimensions[0][0],2)%1 != 0.0 or math.log(dimensions[0][1],2)%1 != 0.0:
             raise Exception("Invalid CNN dimensions")
         self.net = ArtificialNeuralNetwork(dimensions) # GENERATE <-
+
+
+
+    def _generate_CNN(self):
+        pass
 
 def check_NxN(*matrices):
     """ Makes sure all matrices are NxN and returns dimension """
