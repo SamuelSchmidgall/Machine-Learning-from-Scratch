@@ -1,5 +1,5 @@
 import random
-from NetworkGenerator.Generator import Generator
+from NeuralNetworks.NetworkGenerator.Generator import Generator
 from NeuralNetworks.Artificial import ArtificialNeuralNetwork
 
 class FlexANN:

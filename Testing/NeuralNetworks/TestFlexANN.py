@@ -1,9 +1,9 @@
 import unittest
-from FlexibleNetworks.FlexANN import FlexANN
+from NeuralNetworks.FlexibleNetworks.FlexANN import FlexANN
 
 class TestFlexANN(unittest.TestCase):
     def setUp(self):
-        
+
         or_tups = [([0, 0], [0]), ([1, 0], [0]), ([0, 1], [0]), ([1, 1], [1])]
         self.orNet = FlexANN('l_int', or_tups, [([0, 0], [0]), ([1, 0], [1]), ([0, 1], [1]), ([1, 1], [1])],
                               [([0, 0], [0]), ([1, 0], [1]), ([0, 1], [1]), ([1, 1], [1])])
