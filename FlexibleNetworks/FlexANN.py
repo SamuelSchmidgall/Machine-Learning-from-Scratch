@@ -1,6 +1,6 @@
 import random
 from NetworkGenerator.Generator import Generator
-from NeuralNetworks.ArtificialNeuralNetwork import ArtificialNeuralNetwork
+from NeuralNetworks.Artificial import ArtificialNeuralNetwork
 
 class FlexANN:
     def __init__(self, d_type, io_tuples, train_data, test_data):
@@ -19,15 +19,20 @@ class FlexANN:
         self._train()
 
     def _train(self, epochs=None):
-        """ Train """
+        """ Train neural network
+            INT: epochs; number of training iterations
+        """
         if epochs is None:
-            epochs = len(self.network_data)**3
+            epochs = len(self.network_data)*10000
         for epoch in range(epochs):
             random.shuffle(self.training_data)
             for d1, d2 in self.training_data:
                 self.network.back_prop(d1,d2)
 
     def forward_propagate(self, inputs):
+        """ Forward propagation
+            LIST/NDARRAY: inputs; input values for ANN
+        """
         return self.network.forward_prop(inputs)
 
     def retrain(self):

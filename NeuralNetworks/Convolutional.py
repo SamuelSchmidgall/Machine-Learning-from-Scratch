@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from NeuralNetworks.ArtificialNeuralNetwork import ArtificialNeuralNetwork
+from NeuralNetworks.Artificial import ArtificialNeuralNetwork
 
 #todo: allow for people to put in any sized images and 'fluff' them
 class ConvolutionalNeuralNetwork:
