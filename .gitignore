@@ -12,3 +12,4 @@ $RECYCLE.BIN/
 .idea
 \__pycache__
 *.pyc
+*.py___jb_tmp___
