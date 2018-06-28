@@ -2,13 +2,13 @@
 ## Scientific computing library with the aim of automatically generating models based on data
 
 ## Features:
-  * Simple Linear Regression
-  * Artificial Neural Network
   * **AUTO** Artificial Neural Network
-
-## Features to be implemented:
+  * Artificial Neural Network
+  * Simple Linear Regression
   * Multiple Linear Regression
   * K-Nearest Neighbors
+   
+## Features to be implemented:
   * Support Vector Machines
   * Convolutional Neural Network
   * Recurrent Neural Network
