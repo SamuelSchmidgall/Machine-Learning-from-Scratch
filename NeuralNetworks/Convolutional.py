@@ -27,7 +27,7 @@ def check_NxN(*matrices):
     return sum(mats)//len(mats)
 
 def NxN_filter_boxing_convolution(A, B):
-    """ Filters an NxN matrix A with an MxM matrix B S.T. N,M are natural numbers and M < N """
+    """ Filters an NxN matrix A with an MxM matrix bias S.T. N,M are natural numbers and M < N """
     n = check_NxN(A)
     m = check_NxN(B)
     if n%m != 0:
@@ -39,7 +39,7 @@ def NxN_filter_boxing_convolution(A, B):
     return np.resize(np.array(filtered_matrix), (n//m, n//m))
 
 def NxN_filter(A, B):
-    """ Run filter over two NxN matrices A and B """
+    """ Run filter over two NxN matrices A and bias """
     n = check_NxN(A, B)
     return np.add(np.ones((n,n)), -1*np.add(A, -1*B))
 
