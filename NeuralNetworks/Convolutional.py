@@ -10,8 +10,6 @@ class ConvolutionalNeuralNetwork:
             raise Exception("Invalid CNN dimensions")
         self.net = ArtificialNeuralNetwork(dimensions) # GENERATE <-
 
-
-
     def _generate_CNN(self):
         pass
 
