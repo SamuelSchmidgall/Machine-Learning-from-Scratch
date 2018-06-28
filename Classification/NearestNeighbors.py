@@ -1,5 +1,17 @@
 import math
 
+"""
+ Sample of what data should look like:
+  data = [(num1, num1, ..., 'label'), (num1, num1, ..., 'label') ... ]
+  knn = NearestNeighbors(5, data)
+  knn.predict((n1, n2, ..., n_m)) -> outputs label
+  --- OR ---
+  data = [(num1, num1, ..., 'label'), (num1, num1, ..., 'label') ... ]
+  knn = NearestNeighbors(5)
+  knn.predict((n1, n2, ..., n_m), data)
+    
+"""
+
 class NearestNeighbors:
 	def __init__(self, k, data=None):
 		""" Instantiate Nearest Neighbors"""
@@ -25,7 +37,7 @@ class NearestNeighbors:
 		 k-Nearest Neighbors algorithm using euclidean distance
 		 tuple/list instance_tuple - data point to predict
 		 tuple/list_list data - list of data points
-		 return most frequent nearest neighbor label
+		 return most frequent nearest neighbor label and the confidence
 		"""
 		if data is None:
 			data = self.data
@@ -35,7 +47,8 @@ class NearestNeighbors:
 		for i in range(len(data)):
 			distances.append((self._distance(data[i], instance_tuple), data[i][-1]))
 		label_vals = [i[1] for i in distances[:self._k]]
-		return max(set(label_vals), key=label_vals.count)
+		label = max(set(label_vals), key=label_vals.count)
+		return label, len(label_vals)/label_vals.count(label) # second value is confidence
 
 	def predict(self, item, data=None):
 		"""
