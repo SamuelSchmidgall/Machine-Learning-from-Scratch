@@ -1,4 +1,4 @@
-from NeuralNetworks.NetworkGenerator.GeneratorANN import GeneratorANN
+from SciGen.NeuralNetworks.NetworkGenerator.GeneratorANN import GeneratorANN
 
 data_types = {'l_float':GeneratorANN, 'l_int':GeneratorANN} #'images'
 

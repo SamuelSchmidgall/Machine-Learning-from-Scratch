@@ -1,6 +1,6 @@
 import random
-from NeuralNetworks.NetworkGenerator.Generator import Generator
-from NeuralNetworks.Artificial import ArtificialNeuralNetwork
+from SciGen.NeuralNetworks.NetworkGenerator.Generator import Generator
+from SciGen.NeuralNetworks.Artificial import ArtificialNeuralNetwork
 
 class FlexANN:
     def __init__(self, d_type, io_tuples, train_data, test_data, complexity=0):

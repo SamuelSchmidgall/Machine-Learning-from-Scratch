@@ -1,5 +1,5 @@
 import unittest
-from NeuralNetworks.FlexibleNetworks.FlexANN import FlexANN
+from SciGen.NeuralNetworks.FlexibleNetworks.FlexANN import FlexANN
 
 class TestFlexANN(unittest.TestCase):
     def setUp(self):
