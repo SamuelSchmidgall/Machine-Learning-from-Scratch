@@ -13,4 +13,4 @@
   * Convolutional Neural Network
   * Recurrent Neural Network
   * LSTM Neural Network
-  
+  * Neuroevolution
