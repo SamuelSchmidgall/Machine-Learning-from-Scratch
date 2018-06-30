@@ -1,6 +1,6 @@
-# PyLearning:
-## Scientific computing library with the aim of automatically generating models based on data
-
+# SciGen
+## Scientific computing library that contains many modern data science tools as well as a few models that automatically generate based on the given dataset.
+ 
 ## Features:
   * **AUTO** Artificial Neural Network
   * Artificial Neural Network
