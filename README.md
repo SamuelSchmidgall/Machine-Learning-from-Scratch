@@ -14,3 +14,4 @@
   * Recurrent Neural Network
   * LSTM Neural Network
   * Neuroevolution
+  * Classic Evolutionary Algorithm
