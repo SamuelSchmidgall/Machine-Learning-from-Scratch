@@ -1,4 +1,10 @@
+#!/usr/bin/env python
+__author__ = "Samuel Schmidgall"
+__license__ = "MIT"
+__email__ = "sschmidg@masonlive.gmu.edu"
+
 import math
+
 
 class GeneratorANN:
     def __init__(self, io_tuples, complexity):

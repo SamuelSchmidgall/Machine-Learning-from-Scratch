@@ -1,10 +1,21 @@
+#!/usr/bin/env python
+__author__ = "Samuel Schmidgall"
+__license__ = "MIT"
+__email__ = "sschmidg@masonlive.gmu.edu"
+
 import math
 import numpy as np
 
+
 class ArtificialNeuralNetwork:
+    """
+    Implementation of Multilayered Arificial Neural Network using purely matrix algebra to enchance model efficency
+    """
     def __init__(self, dimensions, weights=None):
-        """ Instantiate Neural Network
-            LIST: dimensions; dimensions of neural network weights
+        """
+        Instantiate Neural Network
+        :param dimensions: list(int) -> dimensions of neural network weights
+        :param weights: (optional) str -> file location of preloaded weights to load into neural network
         """
         if not all(element > 0 for element in dimensions):
             raise Exception("Invalid input size")
@@ -12,53 +23,67 @@ class ArtificialNeuralNetwork:
         self._output_length = dimensions[-1]
         # generate weights where for each matrix the rows represent the weights connecting to a node in the next layer
         if weights is None:
-            self._weights = [np.random.uniform(-1, 1, (dimensions[itr+1], dimensions[itr])) for itr in range(len(dimensions)-1)]
+            self._weights = [np.random.uniform(-1, 1, (dimensions[itr+1], dimensions[itr]))
+                             for itr in range(len(dimensions)-1)]
         else:
             self._weights = self._load_weights(weights)
         self._biases = [np.random.uniform(-1, 1, (dimensions[itr+1])) for itr in range(len(dimensions)-1)]
 
     def _sigmoid(self, x):
-        """ Sigmoid function
-            FLOAT/INT/NDARRAY: x; value to compute sigmoid
+        """
+        Sigmoid function
+        :param x: ndarray -> value to compute sigmoid
+        :return: ndarray -> sigmoid activated ndarray
         """
         return 1/(1+math.e**(-x))
 
     def _sigmoid_derivative(self, sigmoid_value):
-        """ Derivative of sigmoid function
-            FLOAT/INT/NDARRAY: sigmoid_value; already processed sigmoid value used to compute sigmoid derivative
+        """
+        Derivative of sigmoid function
+        :param sigmoid_value: ndarray -> already processed sigmoid value used to compute sigmoid derivative
+        :return: ndarray -> derivative of processed sigmoid value input
         """
         return sigmoid_value*(1.0 - sigmoid_value)
 
     def _activate(self, weights, inp, weight_val):
-        """ Activation function
-            NDARRAY: weights; network weight matrix
-            NDARRAY: inp; input values
-            INT: weight_val; used to index biases
+        """
+        Activation function (defaulted to sigmoid)
+        :param weights: ndarray -> network weight matrix
+        :param inp: ndarray -> input values
+        :param weight_val: int -> used to index biases
+        :return: ndarray -> activated sigmoid
         """
         return self._sigmoid(np.add(np.matmul(weights,inp), self._biases[weight_val]))
 
     def save(self, filename):
-        """ Save the weights of your neural network
-            STRING: filename; used to conveniently save neural network weights as numpy matrix
+        """
+        Save the weights of your neural network
+        :param filename: str -> used to conveniently save neural network weights as numpy matrix
         """
         np.save(filename, self._weights)
 
     def _load_weights(self, filename):
-        """ Load weights into neural network
-            STRING: filename; location in which network weights are retrieved
+        """
+        Load weights into neural network
+        :param filename: str -> location in which network weights are retrieved
+        :return: ndarray -> loaded weights
         """
         return np.load(filename)
 
     def forward_prop(self, inputs):
-        """ Forward propagation
-            NDARRAY: inputs; used to calculate forward propogation value
+        """
+        Forward propogate given ndarray
+        :param inputs: ndarray -> used to calculate forward propogation value
+        :return: ndarray -> forward propogated values
         """
         value, outputs = self._forward_prop(inputs)
         return value
 
     def _forward_prop(self, inputs):
-        """ Forward propagation with output values for backpropagation
-            NDARRAY: inputs; used to calculate forward propogation value
+        """
+        Forward propagation with output values for backpropagation
+        :param inputs: ndarray -> used to calculate forward propogation value
+        :return: ndarrayy -> forward propgated values
         """
         if len(inputs) != self._input_length or type(inputs) not in (np.ndarray, list):
             raise Exception("Invalid input")
@@ -71,10 +96,11 @@ class ArtificialNeuralNetwork:
         return inputs, np.array(outputs[:-1])
 
     def back_prop(self, inputs, exp_val, learning_rate=0.01):
-        """ Backpropagation algorithm using matrix algebra
-            NDARRAY: inputs; input values
-            NDARRAY: exp_val; expected return value from input
-            FLOAT: learning_rate; learning rate of network
+        """
+        Backpropagation algorithm using matrix algebra
+        :param inputs: ndarray/list -> input values
+        :param exp_val: ndarray -> expected return value
+        :param learning_rate: float -> rate at which network learns
         """
         if len(exp_val) != self._output_length or type(exp_val) not in (np.ndarray, list):
             raise Exception("Invalid expected value -- check size or type")
@@ -100,4 +126,3 @@ class ArtificialNeuralNetwork:
             self._weights[itr-1] = np.add(self._weights[itr-1], weight_deltas) # update weights
             hidden = np.resize(output_values[itr-1], (len(output_values[itr-1]), 1)) # update hidden layer outputs
 
-        
