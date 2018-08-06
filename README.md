@@ -9,6 +9,10 @@
   * K-Nearest Neighbors
    
 ## Features to be implemented:
+  * Splines
+  * Random Forests
+  * Logistic Regression
+  * Various Criterion
   * Support Vector Machines
   * Convolutional Neural Network
   * Recurrent Neural Network
