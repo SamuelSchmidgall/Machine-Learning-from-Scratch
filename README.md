@@ -19,3 +19,4 @@
   * LSTM Neural Network
   * Neuroevolution
   * Classic Evolutionary Algorithm
+  * Clustering Algorithms
