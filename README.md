@@ -2,16 +2,15 @@
 ## Scientific computing library that contains many modern data science tools as well as a few models that automatically generate based on the given dataset.
  
 ## Features:
-  * **AUTO** Artificial Neural Network
   * Artificial Neural Network
+  * K-Nearest Neighbors
+  * Logistic Regression
   * Simple Linear Regression
   * Multiple Linear Regression
-  * K-Nearest Neighbors
    
 ## Features to be implemented:
   * Smoothing Splines
   * Random Forests
-  * Logistic Regression
   * Cross-Validation Support
   * Polynomial Regression
   * Local Regression
@@ -26,5 +25,5 @@
   * Convolutional Neural Network
   * Recurrent Neural Network
   * LSTM Neural Network
-  * Neuroevolution
+  * Neuro-evolution
   * Classic Evolutionary Algorithm
