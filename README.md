@@ -9,14 +9,22 @@
   * K-Nearest Neighbors
    
 ## Features to be implemented:
-  * Splines
+  * Smoothing Splines
   * Random Forests
   * Logistic Regression
-  * Various Criterion
+  * Cross-Validation Support
+  * Polynomial Regression
+  * Local Regression
+  * Generalized Additive Models
+  * Regression Trees
+  * Classification Trees
+  * K-Means Clustering
+  * Dimension Reduction Methods
+  * Maximal Margin Classifier
+  * Support Vector Classifier
   * Support Vector Machines
   * Convolutional Neural Network
   * Recurrent Neural Network
   * LSTM Neural Network
   * Neuroevolution
   * Classic Evolutionary Algorithm
-  * Clustering Algorithms
