@@ -23,6 +23,8 @@ class LogisticRegression:
         :param inputs: ndarray -> values to be used for prediction
         :return: float -> value between 0 and 1 to indicate prediction from model
         """
+        if self._weights is None:
+            raise Exception('Model must be trained before prediction can occur')
         _values = np.dot(inputs, self._weights)
         _prediction = self._sigmoid(_values)
         return _prediction
