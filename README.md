@@ -13,7 +13,6 @@
   * Smoothing Splines
   * Random Forests
   * Cross-Validation Support
-  * Polynomial Regression
   * Local Regression
   * Generalized Additive Models
   * Regression Trees
