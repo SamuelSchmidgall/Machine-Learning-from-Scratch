@@ -23,6 +23,7 @@
   * Support Vector Machines
   * Convolutional Neural Network
   * Recurrent Neural Network
+  * Principle Component Analysis
   * LSTM Neural Network
   * Neuro-evolution
   * Classic Evolutionary Algorithm
