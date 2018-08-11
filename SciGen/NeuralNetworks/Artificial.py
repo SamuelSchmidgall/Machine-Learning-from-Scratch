@@ -27,59 +27,14 @@ class ArtificialNeuralNetwork:
         else:
             self._weights = self._load_weights(weights)
         self._biases = [np.random.uniform(-1, 1, (dimensions[itr+1])) for itr in range(len(dimensions)-1)]
-
-    @staticmethod
-    def _sigmoid(value):
+    
+    def predict(self, predictors):
         """
-        Sigmoid function
-        :param x: ndarray -> value to compute sigmoid
-        :return: ndarray -> sigmoid activated ndarray
+        Predict output given a set of predictors
+        :param predictors: ndarray -> used to calculate prediction
+        :return: ndarray -> prediction
         """
-        return 1/(1+math.e**(-value))
-
-    @staticmethod
-    def _sigmoid_derivative(sigmoid_value):
-        """
-        Derivative of sigmoid function
-        :param sigmoid_value: ndarray -> already processed sigmoid value used to compute sigmoid derivative
-        :return: ndarray -> derivative of processed sigmoid value input
-        """
-        return sigmoid_value*(1.0 - sigmoid_value)
-
-    def _activate(self, weights, inp, weight_val):
-        """
-        Activation function (defaulted to sigmoid)
-        :param weights: ndarray -> network weight matrix
-        :param inp: ndarray -> input values
-        :param weight_val: int -> used to index biases
-        :return: ndarray -> activated sigmoid
-        """
-        return self._sigmoid(np.add(np.matmul(weights,inp), self._biases[weight_val]))
-
-    def save(self, filename):
-        """
-        Save the weights of your neural network
-        :param filename: str -> used to conveniently save neural network weights as numpy matrix
-        """
-        np.save(filename, self._weights)
-
-    @staticmethod
-    def _load_weights(filename):
-        """
-        Load weights into neural network
-        :param filename: str -> location in which network weights are retrieved
-        :return: ndarray -> loaded weights
-        """
-        return np.load(filename)
-
-    def forward_prop(self, inputs):
-        """
-        Forward propogate given ndarray
-        :param inputs: ndarray -> used to calculate forward propogation value
-        :return: ndarray -> forward propogated values
-        """
-        value, outputs = self._forward_prop(inputs)
-        return value
+        return self._p_forward_prop(self, predictors)
 
     def _forward_prop(self, inputs):
         """
@@ -127,4 +82,57 @@ class ArtificialNeuralNetwork:
             weight_deltas = np.matmul(gradients, inputs.T)  # generate weight deltas
             self._weights[itr-1] = np.add(self._weights[itr-1], weight_deltas)  # update weights
             hidden = np.resize(output_values[itr-1], (len(output_values[itr-1]), 1))  # update hidden layer outputs
+
+    def _activate(self, weights, inp, weight_val):
+        """
+        Activation function (defaulted to sigmoid)
+        :param weights: ndarray -> network weight matrix
+        :param inp: ndarray -> input values
+        :param weight_val: int -> used to index biases
+        :return: ndarray -> activated sigmoid
+        """
+        return self._sigmoid(np.add(np.matmul(weights,inp), self._biases[weight_val]))
+
+    def _p_forward_prop(self, inputs):
+        """
+        Forward propogate given ndarray
+        :param inputs: ndarray -> used to calculate forward propogation value
+        :return: ndarray -> forward propogated values
+        """
+        value, outputs = self._forward_prop(inputs)
+        return value
+
+    def save(self, filename):
+        """
+        Save the weights of your neural network
+        :param filename: str -> used to conveniently save neural network weights as numpy matrix
+        """
+        np.save(filename, self._weights)
+
+    @staticmethod
+    def _load_weights(filename):
+        """
+        Load weights into neural network
+        :param filename: str -> location in which network weights are retrieved
+        :return: ndarray -> loaded weights
+        """
+        return np.load(filename)
+    
+    @staticmethod
+    def _sigmoid(value):
+        """
+        Sigmoid function
+        :param x: ndarray -> value to compute sigmoid
+        :return: ndarray -> sigmoid activated ndarray
+        """
+        return 1/(1+math.e**(-value))
+
+    @staticmethod
+    def _sigmoid_derivative(sigmoid_value):
+        """
+        Derivative of sigmoid function
+        :param sigmoid_value: ndarray -> already processed sigmoid value used to compute sigmoid derivative
+        :return: ndarray -> derivative of processed sigmoid value input
+        """
+        return sigmoid_value*(1.0 - sigmoid_value)
 
