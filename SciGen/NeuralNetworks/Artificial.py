@@ -34,7 +34,7 @@ class ArtificialNeuralNetwork:
         :param predictors: ndarray -> used to calculate prediction
         :return: ndarray -> prediction
         """
-        return self._p_forward_prop(self, predictors)
+        return self._p_forward_prop(predictors)
 
     def _forward_prop(self, inputs):
         """
@@ -52,10 +52,10 @@ class ArtificialNeuralNetwork:
             outputs.append(inputs)  # keep track of outputs for back propagation
         return inputs, np.array(outputs[:-1])
 
-    def back_prop(self, inputs, exp_val, learning_rate=0.01):
+    def back_prop(self, predictors, exp_val, learning_rate=0.01):
         """
         Back propagation algorithm using matrix algebra
-        :param inputs: ndarray/list -> input values
+        :param predictors: ndarray/list -> predictor values
         :param exp_val: ndarray -> expected return value
         :param learning_rate: float -> rate at which network learns
         """
@@ -63,7 +63,7 @@ class ArtificialNeuralNetwork:
             raise Exception("Invalid expected value -- check size or type")
         elif type(exp_val) is list:
             exp_val = np.array(exp_val)
-        ret_val, output_values = self._forward_prop(inputs)  # forward prop values
+        ret_val, output_values = self._forward_prop(predictors)  # forward prop values
         ret_val = np.resize(ret_val, (len(ret_val), 1))  # resize into vector format
         hidden = np.resize(output_values[-1], (len(output_values[-1]), 1))  # resize into vector format
         targets = np.resize(exp_val, (len(exp_val), 1))  # resize into vector format
@@ -93,13 +93,13 @@ class ArtificialNeuralNetwork:
         """
         return self._sigmoid(np.add(np.matmul(weights,inp), self._biases[weight_val]))
 
-    def _p_forward_prop(self, inputs):
+    def _p_forward_prop(self, predictors):
         """
         Forward propogate given ndarray
-        :param inputs: ndarray -> used to calculate forward propogation value
+        :param predictors: ndarray -> used to calculate forward propogation value
         :return: ndarray -> forward propogated values
         """
-        value, outputs = self._forward_prop(inputs)
+        value, outputs = self._forward_prop(predictors)
         return value
 
     def save(self, filename):
@@ -122,7 +122,7 @@ class ArtificialNeuralNetwork:
     def _sigmoid(value):
         """
         Sigmoid function
-        :param x: ndarray -> value to compute sigmoid
+        :param value: ndarray -> value to compute sigmoid
         :return: ndarray -> sigmoid activated ndarray
         """
         return 1/(1+math.e**(-value))
@@ -135,4 +135,3 @@ class ArtificialNeuralNetwork:
         :return: ndarray -> derivative of processed sigmoid value input
         """
         return sigmoid_value*(1.0 - sigmoid_value)
-
