@@ -8,7 +8,8 @@
   * Simple Linear Regression
   * Multiple Linear Regression
   * K-Means Clustering
-   
+  * Classification Tree
+  
 ## Features to be implemented:
   * Smoothing Splines
   * Random Forests
@@ -16,7 +17,6 @@
   * Local Regression
   * Generalized Additive Models
   * Regression Trees
-  * Classification Trees
   * Dimension Reduction Methods
   * Maximal Margin Classifier
   * Support Vector Classifier
