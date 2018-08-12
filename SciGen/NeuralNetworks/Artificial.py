@@ -3,26 +3,26 @@ __author__ = "Samuel Schmidgall"
 __license__ = "MIT"
 __email__ = "sschmidg@masonlive.gmu.edu"
 
-import math
 import numpy as np
+from SciGen.NeuralNetworks.Activation import sigmoid
 
 
 class ArtificialNeuralNetwork:
     """
     Implementation of multi-layered perceptron using purely matrix algebra to enhance model efficiency
     """
-    def __init__(self, dimensions, weights=None, activation_function='sigmoid'):
+    def __init__(self, dimensions, weights=None, activation_function=sigmoid):
         """
         Instantiate Neural Network
         :param dimensions: list(int) -> dimensions of neural network weights
         :param weights: (optional) str -> file location of preloaded weights to load into neural network
-        :param activation_function: str -> activation function of desired use for forward and back propagation
+        :param activation_function: function -> activation function of desired use for forward and back propagation
         """
         if not all(element > 0 for element in dimensions):
             raise Exception("Invalid input size")
         self._input_length = dimensions[0]
         self._output_length = dimensions[-1]
-        self._activation = self._set_activation(activation_function)
+        self._activation = activation_function
         if weights is None:
             self._weights = [np.random.uniform(-1, 1, (dimensions[itr+1], dimensions[itr]))
                              for itr in range(len(dimensions)-1)]
@@ -72,7 +72,8 @@ class ArtificialNeuralNetwork:
         hidden = np.resize(output_values[-1], (len(output_values[-1]), 1))  # resize into vector format
         targets = np.resize(exp_val, (len(exp_val), 1))  # resize into vector format
         error = np.add(targets, -1 * ret_val)  # generate initial error
-        gradients = np.multiply(self._activation_function(ret_val, derivative=True), error) * learning_rate  # get initial gradients
+        gradients = np.multiply(
+            self._activation_function(ret_val, derivative=True), error) * learning_rate  # get initial gradients
         weight_deltas = np.matmul(gradients, hidden.T)  # generate initial weight deltas
         self._biases[-1] = np.add(self._biases[-1], gradients)
         self._weights[-1] = np.add(self._weights[-1], weight_deltas)  # update weights based on weight deltas
@@ -81,7 +82,8 @@ class ArtificialNeuralNetwork:
             inputs = np.resize(output_values[itr-1], (len(output_values[itr-1]), 1))
             weight_m = self._weights[itr].T  # generate transpose of corresponding weight matrix
             error = np.matmul(weight_m, error)  # calculate error
-            gradients = np.multiply(self._activation_function(hidden, derivative=True), error)*learning_rate  # calculate gradient
+            gradients = np.multiply(
+                self._activation_function(hidden, derivative=True), error)*learning_rate  # calculate gradient
             self._biases[itr-1] = np.add(self._biases[itr-1], np.resize(gradients, (len(self._biases[itr-1]))))
             weight_deltas = np.matmul(gradients, inputs.T)  # generate weight deltas
             self._weights[itr-1] = np.add(self._weights[itr-1], weight_deltas)  # update weights
@@ -93,17 +95,6 @@ class ArtificialNeuralNetwork:
         :param filename: str -> used to conveniently save neural network weights as numpy matrix
         """
         np.save(filename, self._weights)
-
-    def _set_activation(self, activation_str):
-        """
-
-        :param activation_str:
-        :return:
-        """
-        activation = {'sigmoid': self._sigmoid, 'tanh': self._tanh, 'softplus': self._softplus}
-        if activation_str not in activation.keys():
-            raise Exception('{} not valid activation functions: Use {}'.format(activation_str, list(activation.keys())))
-        return activation[activation_str]
 
     def _activation_function(self, value, derivative=False):
         """
@@ -141,39 +132,3 @@ class ArtificialNeuralNetwork:
         :return: ndarray -> loaded weights
         """
         return np.load(filename)
-
-    @staticmethod
-    def _tanh(value, derivative=False):
-        """
-        Tanh(x) function / derivative
-        :param value: ndarray -> value to activate
-        :param derivative: bool -> compute derivative
-        :return: ndarray -> activated ndarray
-        """
-        if derivative:
-            return 1.0-(value**2.0)
-        return np.tanh(value)
-
-    @staticmethod
-    def _sigmoid(value, derivative=False):
-        """
-        Sigmoid(x) function / derivative
-        :param value: ndarray -> value to activate
-        :param derivative: bool -> compute derivative
-        :return: ndarray -> activated ndarray
-        """
-        if derivative:
-            return value*(1.0 - value)
-        return 1.0/(1.0 + np.exp(-value))
-
-    @staticmethod
-    def _softplus(value, derivative=False):
-        """
-        Softplus(x) function / derivative
-        :param value: ndarray -> value to activate
-        :param derivative: bool -> compute derivative
-        :return: ndarray -> activated ndarray
-        """
-        if derivative:
-            return 1.0/(1.0 + np.exp(-value))
-        return np.log(1.0 + np.exp(value))
