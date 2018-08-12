@@ -11,16 +11,18 @@ class ArtificialNeuralNetwork:
     """
     Implementation of multi-layered perceptron using purely matrix algebra to enhance model efficiency
     """
-    def __init__(self, dimensions, weights=None):
+    def __init__(self, dimensions, weights=None, activation_function='sigmoid'):
         """
         Instantiate Neural Network
         :param dimensions: list(int) -> dimensions of neural network weights
         :param weights: (optional) str -> file location of preloaded weights to load into neural network
+        :param activation_function: str -> activation function of desired use for forward and back propagation
         """
         if not all(element > 0 for element in dimensions):
             raise Exception("Invalid input size")
         self._input_length = dimensions[0]
         self._output_length = dimensions[-1]
+        self._activation = self._set_activation(activation_function)
         if weights is None:
             self._weights = [np.random.uniform(-1, 1, (dimensions[itr+1], dimensions[itr]))
                              for itr in range(len(dimensions)-1)]
@@ -46,6 +48,7 @@ class ArtificialNeuralNetwork:
             raise Exception("Invalid input")
         elif type(inputs) is list:
             inputs = np.array(inputs)
+        inputs = np.array(inputs, dtype=np.float64)
         outputs = [inputs]
         for itr in range(len(self._weights)):
             inputs = self._activate(self._weights[itr], inputs, itr)  # update values to propagate
@@ -63,12 +66,13 @@ class ArtificialNeuralNetwork:
             raise Exception("Invalid expected value -- check size or type")
         elif type(exp_val) is list:
             exp_val = np.array(exp_val)
+        exp_val = np.array(exp_val, dtype=np.float64)
         ret_val, output_values = self._forward_prop(predictors)  # forward prop values
         ret_val = np.resize(ret_val, (len(ret_val), 1))  # resize into vector format
         hidden = np.resize(output_values[-1], (len(output_values[-1]), 1))  # resize into vector format
         targets = np.resize(exp_val, (len(exp_val), 1))  # resize into vector format
         error = np.add(targets, -1 * ret_val)  # generate initial error
-        gradients = np.multiply(self._sigmoid_derivative(ret_val), error) * learning_rate  # get initial gradients
+        gradients = np.multiply(self._activation_function(ret_val, derivative=True), error) * learning_rate  # get initial gradients
         weight_deltas = np.matmul(gradients, hidden.T)  # generate initial weight deltas
         self._biases[-1] = np.add(self._biases[-1], gradients)
         self._weights[-1] = np.add(self._weights[-1], weight_deltas)  # update weights based on weight deltas
@@ -77,11 +81,38 @@ class ArtificialNeuralNetwork:
             inputs = np.resize(output_values[itr-1], (len(output_values[itr-1]), 1))
             weight_m = self._weights[itr].T  # generate transpose of corresponding weight matrix
             error = np.matmul(weight_m, error)  # calculate error
-            gradients = np.multiply(self._sigmoid_derivative(hidden), error)*learning_rate  # calculate gradient
+            gradients = np.multiply(self._activation_function(hidden, derivative=True), error)*learning_rate  # calculate gradient
             self._biases[itr-1] = np.add(self._biases[itr-1], np.resize(gradients, (len(self._biases[itr-1]))))
             weight_deltas = np.matmul(gradients, inputs.T)  # generate weight deltas
             self._weights[itr-1] = np.add(self._weights[itr-1], weight_deltas)  # update weights
             hidden = np.resize(output_values[itr-1], (len(output_values[itr-1]), 1))  # update hidden layer outputs
+
+    def save_model(self, filename):
+        """
+        Save the weights of your neural network
+        :param filename: str -> used to conveniently save neural network weights as numpy matrix
+        """
+        np.save(filename, self._weights)
+
+    def _set_activation(self, activation_str):
+        """
+
+        :param activation_str:
+        :return:
+        """
+        activation = {'sigmoid': self._sigmoid, 'tanh': self._tanh, 'softplus': self._softplus}
+        if activation_str not in activation.keys():
+            raise Exception('{} not valid activation functions: Use {}'.format(activation_str, list(activation.keys())))
+        return activation[activation_str]
+
+    def _activation_function(self, value, derivative=False):
+        """
+        Activation function (defaulted to sigmoid) based on value
+        :param value: ndarray -> value to activate
+        :param derivative: bool -> derivative or not
+        :return: ndarray -> activated value
+        """
+        return self._activation(value, derivative)
 
     def _activate(self, weights, inp, weight_val):
         """
@@ -91,7 +122,7 @@ class ArtificialNeuralNetwork:
         :param weight_val: int -> used to index biases
         :return: ndarray -> activated sigmoid
         """
-        return self._sigmoid(np.add(np.matmul(weights,inp), self._biases[weight_val]))
+        return self._activation_function(np.add(np.matmul(weights, inp), self._biases[weight_val]))
 
     def _p_forward_prop(self, predictors):
         """
@@ -102,13 +133,6 @@ class ArtificialNeuralNetwork:
         value, outputs = self._forward_prop(predictors)
         return value
 
-    def save(self, filename):
-        """
-        Save the weights of your neural network
-        :param filename: str -> used to conveniently save neural network weights as numpy matrix
-        """
-        np.save(filename, self._weights)
-
     @staticmethod
     def _load_weights(filename):
         """
@@ -117,21 +141,39 @@ class ArtificialNeuralNetwork:
         :return: ndarray -> loaded weights
         """
         return np.load(filename)
-    
-    @staticmethod
-    def _sigmoid(value):
-        """
-        Sigmoid function
-        :param value: ndarray -> value to compute sigmoid
-        :return: ndarray -> sigmoid activated ndarray
-        """
-        return 1/(1+math.e**(-value))
 
     @staticmethod
-    def _sigmoid_derivative(sigmoid_value):
+    def _tanh(value, derivative=False):
         """
-        Derivative of sigmoid function
-        :param sigmoid_value: ndarray -> already processed sigmoid value used to compute sigmoid derivative
-        :return: ndarray -> derivative of processed sigmoid value input
+        Tanh(x) function / derivative
+        :param value: ndarray -> value to activate
+        :param derivative: bool -> compute derivative
+        :return: ndarray -> activated ndarray
         """
-        return sigmoid_value*(1.0 - sigmoid_value)
+        if derivative:
+            return 1.0-(value**2.0)
+        return np.tanh(value)
+
+    @staticmethod
+    def _sigmoid(value, derivative=False):
+        """
+        Sigmoid(x) function / derivative
+        :param value: ndarray -> value to activate
+        :param derivative: bool -> compute derivative
+        :return: ndarray -> activated ndarray
+        """
+        if derivative:
+            return value*(1.0 - value)
+        return 1.0/(1.0 + np.exp(-value))
+
+    @staticmethod
+    def _softplus(value, derivative=False):
+        """
+        Softplus(x) function / derivative
+        :param value: ndarray -> value to activate
+        :param derivative: bool -> compute derivative
+        :return: ndarray -> activated ndarray
+        """
+        if derivative:
+            return 1.0/(1.0 + np.exp(-value))
+        return np.log(1.0 + np.exp(value))
