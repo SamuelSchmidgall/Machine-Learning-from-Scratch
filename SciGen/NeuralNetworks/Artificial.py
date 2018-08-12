@@ -42,7 +42,7 @@ class ArtificialNeuralNetwork:
     def train(self, predictors, expected_values, iterations, learning_rate=0.01):
         """
         Train a neural network based on a set of predictors and expected values
-        :param predictors: list(ndarray) -> list of predictors to train network on
+        :param predictors: list(ndarray) -> list of predictors to train model on
         :param expected_values: list(ndarray) -> list of expected values for given predictors
         :param iterations: int -> number of training iterations
         :param learning_rate: float -> rate in which model learns
