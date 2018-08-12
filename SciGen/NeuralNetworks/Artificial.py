@@ -3,6 +3,7 @@ __author__ = "Samuel Schmidgall"
 __license__ = "MIT"
 __email__ = "sschmidg@masonlive.gmu.edu"
 
+import random
 import numpy as np
 from SciGen.NeuralNetworks.Activation import sigmoid
 
@@ -37,6 +38,23 @@ class ArtificialNeuralNetwork:
         :return: ndarray -> prediction
         """
         return self._p_forward_prop(predictors)
+
+    def train(self, predictors, expected_values, iterations, learning_rate=0.01):
+        """
+        Train a neural network based on a set of predictors and expected values
+        :param predictors: list(ndarray) -> list of predictors to train network on
+        :param expected_values: list(ndarray) -> list of expected values for given predictors
+        :param iterations: int -> number of training iterations
+        :param learning_rate: float -> rate in which model learns
+        """
+        if len(predictors) != len(expected_values):
+            raise Exception('Predictor length != Expected value length')
+        _training_data = [(predictors[_itr], expected_values[_itr]) for _itr in range(len(expected_values))]
+        for _ in range(iterations):
+            random.shuffle(_training_data)
+            _sample_train = _training_data[:int(len(_training_data)*0.25)]
+            for _train_index in range(len(_sample_train)):
+                self.back_prop(_sample_train[_train_index][0], _sample_train[_train_index][1], learning_rate)
 
     def _forward_prop(self, inputs):
         """
