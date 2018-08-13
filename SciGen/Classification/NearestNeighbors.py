@@ -5,18 +5,6 @@ __email__ = "sschmidg@masonlive.gmu.edu"
 
 import math
 
-"""
- Sample of what data should look like:
-  data = [(num1, num1, ..., 'label'), (num1, num1, ..., 'label') ... ]
-  knn = NearestNeighbors(5, data)
-  knn.predict((n1, n2, ..., n_m)) -> outputs label
-  --- OR ---
-  data = [(num1, num1, ..., 'label'), (num1, num1, ..., 'label') ... ]
-  knn = NearestNeighbors(5)
-  knn.predict((n1, n2, ..., n_m), data)
-    
-"""
-
 
 class NearestNeighbors:
 
@@ -24,20 +12,6 @@ class NearestNeighbors:
         """ Instantiate Nearest Neighbors"""
         self._k = k
         self.data = data
-
-    def _distance(self, val1, val2):
-        """
-        Compute euclidean distance between two tuples
-        int/double_tuple val1 - tuple of values
-        int/double_tuple val2 -  tuple of values
-        return distance as float
-        """
-        dist = 0.0
-        if len(val1)-1 != len(val2):
-            raise Exception("Values must have equal length")
-        for val in range(len(val1)-1):
-            dist += (val1[val] + val2[val])**2
-        return math.sqrt(dist)
 
     def _neighbors(self, instance_tuple, data):
         """
@@ -65,3 +39,31 @@ class NearestNeighbors:
         return prediction as label
         """
         return self._neighbors(item, data)
+
+    @staticmethod
+    def _distance(val1, val2):
+        """
+        Compute euclidean distance between two tuples
+        int/double_tuple val1 - tuple of values
+        int/double_tuple val2 -  tuple of values
+        return distance as float
+        """
+        dist = 0.0
+        if len(val1)-1 != len(val2):
+            raise Exception("Values must have equal length")
+        for val in range(len(val1)-1):
+            dist += (val1[val] + val2[val])**2
+        return math.sqrt(dist)
+
+
+"""
+ Sample of what data should look like:
+  data = [(num1, num1, ..., 'label'), (num1, num1, ..., 'label') ... ]
+  knn = NearestNeighbors(5, data)
+  knn.predict((n1, n2, ..., n_m)) -> outputs label
+  --- OR ---
+  data = [(num1, num1, ..., 'label'), (num1, num1, ..., 'label') ... ]
+  knn = NearestNeighbors(5)
+  knn.predict((n1, n2, ..., n_m), data)
+
+"""
