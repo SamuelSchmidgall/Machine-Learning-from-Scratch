@@ -5,7 +5,7 @@ __email__ = "sschmidg@masonlive.gmu.edu"
 
 import random
 import numpy as np
-from SciGen.NeuralNetworks.Activation import sigmoid
+from SciGen.Utils.ActivationFunctions import sigmoid
 
 
 class ArtificialNeuralNetwork:
