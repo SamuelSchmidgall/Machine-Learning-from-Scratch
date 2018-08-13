@@ -5,6 +5,7 @@ __email__ = "sschmidg@masonlive.gmu.edu"
 __credits__ = "Nick Becker"
 
 import numpy as np
+from SciGen.Utils.ActivationFunctions import sigmoid
 
 
 class LogisticRegression:
@@ -26,7 +27,7 @@ class LogisticRegression:
         if self._weights is None:
             raise Exception('Model must be trained before prediction can occur')
         _values = np.dot(inputs, self._weights)
-        _prediction = self._sigmoid(_values)
+        _prediction = sigmoid(_values)
         return _prediction
 
     def train(self, inputs, exp_val, steps=100000, learning_rate=0.01, add_intercept=False):
@@ -44,7 +45,7 @@ class LogisticRegression:
         _weights = np.zeros(inputs.shape[1])
         for step in range(steps):
             _val = np.dot(inputs, _weights)
-            _grad = np.dot(inputs.T, exp_val - self._sigmoid(_val))
+            _grad = np.dot(inputs.T, exp_val - sigmoid(_val))
             _weights += learning_rate*_grad
         self._weights = _weights
 
@@ -60,12 +61,4 @@ class LogisticRegression:
         _values = np.dot(inp, weights)
         return np.sum(exp_val*_values - np.log(1 + np.exp(_values)))
 
-    @staticmethod
-    def _sigmoid(value):
-        """
-        Sigmoid function
-        :param value: ndarray -> value to calculate sigmoid on
-        :return: ndarray -> calculated value
-        """
-        return 1/(1 + np.exp(-value))
 
