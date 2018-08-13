@@ -39,6 +39,9 @@ class LogisticRegression:
         :param learning_rate: float -> rate at which model should learn
         :param add_intercept: bool -> should intercept be added
         """
+        if type(inputs) == list:
+            inputs = np.array(inputs)
+            inputs.resize((len(inputs), 1))
         if add_intercept:
             intercept = np.ones((inputs.shape[0], 1))
             inputs = np.hstack((intercept, inputs))
