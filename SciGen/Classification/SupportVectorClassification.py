@@ -4,7 +4,6 @@ __license__ = "MIT"
 __email__ = "sschmidg@masonlive.gmu.edu"
 __credits__ = "Steve Schluchter -- An amazing Linear Algebra Professor"
 
-import scipy
 import cvxopt
 import numpy as np
 
@@ -47,12 +46,12 @@ class SupportVectorClassification:
         k = np.array([np.dot(predictors[i], predictors[j]) for j in range(m) for i in range(m)]).reshape((m, m))
         p = cvxopt.matrix(np.outer(expected_values, expected_values)*k)
         q = cvxopt.matrix(-1*np.ones(m))
-        equality_contraint1 = cvxopt.matrix(expected_values, (1,  m))
-        equality_contraint2 = cvxopt.matrix(0.0)
-        inequality_contraint1 = cvxopt.matrix(np.diag(-1*np.ones(m)))
-        inequality_contraint2 = cvxopt.matrix(np.zeros(m))
-        solution = cvxopt.solvers.qp(p, q, inequality_contraint1, inequality_contraint2,
-                                     equality_contraint1, equality_contraint2)
+        equality_constraint1 = cvxopt.matrix(expected_values, (1,  m))
+        equality_constraint2 = cvxopt.matrix(0.0)
+        inequality_constraint1 = cvxopt.matrix(np.diag(-1*np.ones(m)))
+        inequality_constraint2 = cvxopt.matrix(np.zeros(m))
+        solution = cvxopt.solvers.qp(p, q, inequality_constraint1, inequality_constraint2,
+                                     equality_constraint1, equality_constraint2)
         multipliers = np.ravel(solution['x'])
         has_positive_multiplier = multipliers > 1e-7
         sv_multipliers = multipliers[has_positive_multiplier]
