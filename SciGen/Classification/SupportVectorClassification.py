@@ -119,7 +119,6 @@ class SupportVectorClassification:
     def _hessian_matrix(vector):
         """
         Calculate the hessian matrix with finite differences
-        https://stackoverflow.com/questions/31206443/numpy-second-derivative-of-a-ndimensional-array
         :param vector: ndarray -> ndarray to calculate hessian matrix of
         :return: ndarray -> shape=(x.dim, x.ndim)+x.shape where
          the array[i, j, ...] corresponds to the second derivative x_ij

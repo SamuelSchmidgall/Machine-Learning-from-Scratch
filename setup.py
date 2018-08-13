@@ -12,7 +12,7 @@ setup(
     version='0.0.1',
     url="https://github.com/AbstractMobius/SciGen",
     packages=['scigen',],
-    install_requires=['numpy'],
+    install_requires=['numpy', 'scipy'],
     license='MIT',
     long_description=open('README.md').read()
 )
