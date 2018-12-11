@@ -1,5 +1,5 @@
 # SciGen
-## Scientific computing library that contains many modern data science tools as well as a few models that automatically generate based on the given dataset.
+## Scientific computing library built from scratch that contains many modern data science tools as well as a few models that automatically generate based on the given dataset.
  
 ## Features:
   * Artificial Neural Network
