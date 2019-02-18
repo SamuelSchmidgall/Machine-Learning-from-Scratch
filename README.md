@@ -31,23 +31,46 @@
 
 ## Using SciGen:
 
-* Artificial Neural network
+* Example of Deep Reinforcement Learning with Neural Network
 ```python
-from SciGen.NeuralNetworks.Artificial import ArtificialNeuralNetwork
+import numpy as np
+from Network.layers import Linear
+from random import randint, choice, uniform
+from Network.neural_network import NeuralNetwork
+from Network.optimizers import MSEStochasticGradientDescent
 
 """ Creating the model """
-stock_net = ArtificialNeuralNetwork(dimensions=[1, 10, 15, 2])
+class CartPolePolicyNetwork:
+    def __init__(self):
+        self._GAMMA = 0.999
+        self._batch_size = 100
+        self._actions = [0, 1]
+        self._learning_modulus = 100
+        self._memory = StateMemory(10000)
+        self._random_action_probability = 0.15
+        self._architecture = [Linear(4, 8, dropout_probability=0.1), Linear(8, 8, dropout_probability=0.2), Linear(8, len(self._actions))]
+        self._net = NeuralNetwork(self._architecture, MSEStochasticGradientDescent(), minibatch_size=4)
 
-""" Obtaining model data """
-stock_data = [([0.3, 0.423, ..], 0.12), ([0.04, -0.2, ...], -0.04), ...]  # ([daily_cost_delta, weekly_cost_delta, ...], expected_return_percentage)
+    def action(self, state, train=False):
+        prediction = self._net.predict(state)
+        if train and uniform(0, 1) <= self._random_action_probability:
+            return choice(self._actions)
+        return self._actions[int(np.argmax(prediction))]
 
-""" Training the model """
-for data in stock_data:
-    inp, expected = data[0], data[1]
-    stock_net.back_prop(inp, expected)
-
-""" Model predictions """
-stock_data = [0.32, 0.56, ...]  # [daily_cost_delta, weekly_cost_delta, ...]
-model_prediction = stock_net.predict(stock_data)
+    def fit(self, action, current_state, previous_state, reward, iteration):
+        self._memory.append((action, current_state, previous_state, reward))
+        if iteration%self._learning_modulus == 0 and len(self._memory) >= self._batch_size:
+            _batch_X, _batch_Y = list(), list()
+            _sample = self._memory.sample(self._batch_size)
+            for _elem in _sample:
+                _s_action, _s_curr_state, _s_prev_state, _s_reward = _elem
+                _y_exp = np.zeros(len(self._actions))
+                if _s_reward != 1.5:
+                    _y_exp[1 if _s_action == 0 else 0] = 1
+                else:
+                    _y_exp[_s_action] = 1
+                _batch_X.append(_s_prev_state)
+                _batch_Y.append(_y_exp)
+            self._net.fit(_batch_X, _batch_Y, 1)
 ```
 
