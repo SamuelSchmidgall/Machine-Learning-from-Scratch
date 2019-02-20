@@ -27,6 +27,7 @@
   * LSTM Neural Network
   * Neuro-evolution
   * Classic Evolutionary Algorithm
+  * Spiking Neural Network
 
 
 ## Using the Library:
