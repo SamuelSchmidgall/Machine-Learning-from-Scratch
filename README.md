@@ -1,5 +1,5 @@
-# SciGen
-## Scientific computing library built from scratch that contains many modern data science tools as well as a few models that automatically generate based on the given dataset.
+# Machine Learning from Scratch
+## Python implementations of various machine learning algorithms from scratch
  
 ## Features:
   * Artificial Neural Network
@@ -29,7 +29,7 @@
   * Classic Evolutionary Algorithm
 
 
-## Using SciGen:
+## Using the Library:
 
 * Example of Deep Reinforcement Learning with Neural Network
 ```python
