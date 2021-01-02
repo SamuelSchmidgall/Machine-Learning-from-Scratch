@@ -10,6 +10,9 @@
   * K-Means Clustering
   * Classification Tree
   * Principle Component Analysis
+  * Weight Agnostic NNs (Ha 2019)
+  * GA Neuroevolution (Clune 2017)
+  * ES Neuroevolution (Salimans 2017)
   
 ## Features to be implemented:
   * Smoothing Splines
@@ -25,7 +28,6 @@
   * Convolutional Neural Network
   * Recurrent Neural Network
   * LSTM Neural Network
-  * Neuro-evolution
   * Classic Evolutionary Algorithm
   * Spiking Neural Network
 
